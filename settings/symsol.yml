@@ -1,0 +1,51 @@
+data_dir: 'data'
+dist: 'mobiusflow'
+
+
+# flow
+layers: 21 
+segments: 64
+
+feature_dim: 512
+rot: '16UnTrans'
+
+frequent_permute: 1
+last_affine: 1
+first_affine: 0
+
+# dataset
+dataset: 'symsol'
+category: 'symsol1'
+embedding: 0
+#eval_category: 'cone'
+category_num: 5
+# 'cone', 'cube', 'cyl',  'icosa', 'tet'
+
+network: "resnet50"
+
+# condition
+condition: 1
+embedding: 0
+embedding_dim: 512
+
+# train
+batch_size: 128
+val_frequency: 2000
+save_frequency: 10000
+max_iteration:  900000
+use_lr_decay: 0
+gpu: 0
+number_queries: 500
+
+# vis
+eval: 'log'
+# 'log', 'sample', 'pdf'
+scatter_size: 1
+# if use 'sample' or 'pdf', please specify eval_category and vis_idx
+# you can also change size of number_queries to obtain better visualization
+#eval_category: 'cyl'
+#vis_idx: 4
+
+# test
+
+eval_train: 'nll'

@@ -1,0 +1,43 @@
+data_dir: '../../data'
+dataset: 'pascal3d'
+
+
+dist: 'mobiusflow'
+condition: 1
+feature_dim: 2048
+
+
+layers: 24
+segments: 64
+rot: '16Trans'
+lu: 0
+
+category: 'all'
+category_num: 12
+embedding: 1
+embedding_dim: 32
+
+
+lr: 1e-4
+gamma: 0.1
+
+network: 'resnet101'
+pretrain_fisher: 1
+
+batch_size: 128
+lr_decay: '12,15'
+
+
+max_iteration: 500000
+log_frequency: 100
+val_frequency: 2500
+save_frequency: 10000
+number_queries: 500
+eval_train: 'acc'
+gpu: 0
+
+eval: 'log' # can also be 'sample', or 'pdf'
+# if use 'sample' or 'pdf', please specify eval_category and vis_idx
+# you can also change size of number_queries to obtain better visualization
+#vis_idx: 10
+#eval_category: 'bus'

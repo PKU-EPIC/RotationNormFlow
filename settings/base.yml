@@ -1,0 +1,34 @@
+exp_name: None
+dist: 'mobiusflow'
+data_dir: '../../data'
+
+condition: 0
+
+layers: 24
+segments: 64
+rot: '16Trans'
+pretrain_fisher: ''
+lu: 0
+
+dataset: 'modelnet'
+network: 'resnet101'
+
+category: 'all'
+category_num: 10
+
+embedding: 0
+embedding_dim: 512
+feature_dim: 512
+
+lr_decay: 1
+lr: 1e-4
+batch_size: 128
+val_frequency: 5000
+save_frequency: 10000
+max_iteration:  900000
+num_workers: 4
+log_frequency: 100
+number_queries: 5000
+gpu: 0
+eval: 'log'
+eval_train: 'acc'
