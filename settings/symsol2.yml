@@ -8,10 +8,10 @@ segments: 64
 
 frequent_permute: 1
 last_affine: 1
-first_affine: 1
+first_affine: 0
 
 feature_dim: 512
-rot: '16Trans'
+rot: '16UnTrans'
 
 # dataset
 dataset: 'symsol'
