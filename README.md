@@ -115,7 +115,11 @@ python eval_uncondition.py <ckpt_path> --config=settings/raw.yml --category=<cat
 ```
 ### SYMSOL:
 ```bash
-python eval.py <ckpt_path> --config=settings/symsol.yml # symsol I
+python eval.py <ckpt_path> --config=settings/symsol.yml # symsol I (MobiusAffine)
+python eval.py <ckpt_path> --config=settings/symsol.yml --rot 16UnRot # symsol I (Ablation: MobiusRot)
+python eval.py <ckpt_path> --config=settings/symsol.yml --layers 42 --last_affine 0 --rot None # symsol I (Ablation: Mobius)
+python eval.py <ckpt_path> --config=settings/symsol.yml --layers 42 --dist noflow # symsol I (Ablation: Affine)
+python eval.py <ckpt_path> --config=settings/symsol.yml --lu 1 # symsol I (Ablation: lu)
 python eval.py <ckpt_path> --config=settings/symsol2.yml --category=<category> # symsol II, category can be [sphereX, cylO, tetX] 
 ```
 
