@@ -155,7 +155,6 @@ name/
 /output
 /run
 /nflows
-*.txt
 temp*
 result/
 Public_prob_orientaion_ePublic_prob_orientation_estimation_with_matrix_fisher_distributions/

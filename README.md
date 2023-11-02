@@ -70,7 +70,7 @@ python train.py --config=settings/symsol2.yml --category=<category> # symsol II,
 
 ### ModelNet10-SO3:
 ```bash
-python train.py --config=settings/modelnet.yml
+python train.py --config=settings/modelnet_uni.yml
 python train.py --config=settings/modelnet_fisher.yml
 ```
 
