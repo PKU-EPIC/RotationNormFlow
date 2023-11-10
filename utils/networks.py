@@ -2,7 +2,8 @@ import torch
 from torch import nn
 from torchvision import models
 from torch.hub import load_state_dict_from_url
-from Matrixfisher.resnet import resnet101, ResnetHead
+from torchvision.models import resnet101
+from torchvision.models.resnet import ResNet101_Weights
 
 '''backbone network to extract feature from image'''
 
@@ -40,8 +41,8 @@ def get_ResNet(config, pretrain=True):
     # if use pretrained matrix fisher model
     if pretrain:
         print(f"Loading pretrained model...")
-        model.load_state_dict(load_state_dict_from_url(
-            models.resnet.model_urls[config.network], map_location='cuda'))
+        weights = ResNet101_Weights.DEFAULT
+        model = resnet101(weights=weights)
 
     model.fc = nn.Sequential(
         nn.Dropout(0.2),
