@@ -6,7 +6,7 @@ dist: 'mobiusflow'
 condition: 1
 feature_dim: 2048
 
-layers: 24
+layers: 12 # Original was 24
 segments: 64
 rot: '16Trans'
 
@@ -19,19 +19,19 @@ category_num: 10
 embedding: 1
 embedding_dim: 32
 
-#cont: True
-#cont_ckpt: 'mobiusflow_3D_sofa_modelnet_b32_lr1.0e-04/Sep12_221117/ckpt_iteration190000'
+# cont_ckpt: 'mobiusflow_3D_sofa_modelnet_b32_lr1.0e-04/Sep12_221117/ckpt_iteration190000'
 
 network: 'resnet101'
 
 lr: 1e-4
-batch_size: 128
+batch_size: 32 # Original was 128
+
 lr_decay: "30,40"
 gamma: 0.1
-num_workers: 4
+num_workers: 1
 max_iteration: 500000
 log_frequency: 20
-val_frequency: 2500
+val_frequency: 500
 save_frequency: 5000
 number_queries: 500
 
