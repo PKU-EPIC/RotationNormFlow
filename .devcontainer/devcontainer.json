@@ -10,7 +10,7 @@
         "--ipc=host"
     ],
     "forwardPorts": [],
-    "postCreateCommand": "pip install -r requirements.txt torch-tb-profiler && /bin/bash download_modelnet10-SO3-dataset.sh",
+    "postCreateCommand": "pip install -r requirements.txt torch-tb-profiler pytest && /bin/bash download_modelnet10-SO3-dataset.sh",
     "customizations": {
         "vscode": {
             "extensions": [

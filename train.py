@@ -187,6 +187,8 @@ def main():
 
         if clock.iteration > config.max_iteration:
             break
+        
+    return result_dict["losses_nll"]
 
 
 if __name__ == "__main__":
