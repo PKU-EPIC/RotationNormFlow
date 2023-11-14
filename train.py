@@ -27,6 +27,7 @@ def main():
     # create experiment config containing all hyperparameters
     config = get_config("train")
     setup_seed(config.RD_SEED)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # create dataloader
     if config.category_num == 1:
@@ -42,7 +43,7 @@ def main():
                       for cat_test_loader in test_loaders] # test per category
 
     # create network and training agent
-    agent = get_agent(config)
+    agent = get_agent(config, device)
 
     # recover training
     if config.cont:

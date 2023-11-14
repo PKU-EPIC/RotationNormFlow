@@ -11,12 +11,13 @@ from flow.flow import get_flow
 from utils.fisher import MatrixFisherN
 
 
-def get_agent(config):
-    return Agent(config)
+def get_agent(config, device):
+    return Agent(config, device)
 
 
 class Agent:
-    def __init__(self, config):
+    def __init__(self, config, device):
+        self.device = device
         self.config = config
         self.flow = get_flow(config)
         self.flow = DataParallel(self.flow)
@@ -28,7 +29,7 @@ class Agent:
             self.optimizer_flow, milestones=lr_decay, gamma=config.gamma))
 
         if config.condition:
-            self.net = get_network(config)
+            self.net = get_network(config, device)
             optimizer_net_list = [*self.net.parameters()]
             if config.embedding and (not config.pretrain_fisher):
                 self.embedding = nn.Parameter(torch.randn(
@@ -47,10 +48,10 @@ class Agent:
         self.clock = utils.TrainClock(scheduler_list)
 
     def forward(self, data):
-        gt = data.get("rot_mat").cuda()  # (b, 3, 3)
+        gt = data.get("rot_mat").to(self.device)  # (b, 3, 3)
         feature, A = self.compute_feature(data, self.config.condition)
 
-        flow = self.flow.cuda()
+        flow = self.flow.to(self.device)
         rotation, ldjs = flow(gt, feature)
         losses_nll = -ldjs
 
@@ -147,10 +148,10 @@ class Agent:
             save_dict["optimizer_net_state_dict"] = self.optimizer_net.state_dict()
             if self.config.category_num != 1 and self.config.embedding and (not self.config.pretrain_fisher):
                 save_dict['embedding'] = self.embedding
-            self.net.cuda()
+            self.net.to(self.device)
 
         torch.save(save_dict, save_path)
-        self.flow.cuda()
+        self.flow.to(self.device)
 
     def load_ckpt(self, name=None):
         """load checkpoint from saved checkpoint"""
@@ -178,18 +179,18 @@ class Agent:
             if self.config.category_num != 1 and self.config.embedding and (not self.config.pretrain_fisher):
                 self.embedding = nn.Parameter(checkpoint['embedding'])
                 optimizer_net_list.append(self.embedding)
-                self.embedding = self.embedding.cuda()
+                self.embedding = self.embedding.to(self.device)
 
             self.optimizer_net = optim.Adam(optimizer_net_list, self.config.lr)
             self.optimizer_net.load_state_dict(
                 checkpoint["optimizer_net_state_dict"],
             )
-            self.net.cuda()
+            self.net.to(self.device)
 
         #print(checkpoint["flow_state_dict"].keys())
         self.flow.module.load_state_dict(checkpoint["flow_state_dict"])
 
-        self.flow.cuda()
+        self.flow.to(self.device)
         self.optimizer_flow = optim.Adam(
             self.flow.parameters(), self.config.lr)
         self.optimizer_flow.load_state_dict(
@@ -200,7 +201,7 @@ class Agent:
     def eval_nll(self, flow, data, feature, A):
         # compute gt_nll
         if self.config.dataset == "symsol":
-            gt = data.get('rot_mat_all').cuda()
+            gt = data.get('rot_mat_all').to(self.device)
             gt_amount = gt.size(1)
             feature_2 = (
                 feature[:, None, :]
@@ -213,7 +214,7 @@ class Agent:
             gt_ldjs = gt_ldjs.reshape(-1, gt_amount)
             losses_ll = gt_ldjs.mean(dim=-1)
         else:
-            gt = data.get('rot_mat').cuda()
+            gt = data.get('rot_mat').to(self.device)
             rotation, gt_ldjs = flow(gt, feature)
             losses_ll = gt_ldjs
 
@@ -250,7 +251,7 @@ class Agent:
             base_ll = pre_distribution._log_prob(
                 sample).reshape(batch, -1)
         else:
-            sample = sd.generate_queries(self.config.number_queries).cuda()
+            sample = sd.generate_queries(self.config.number_queries).to(self.device)
             sample = (
                 sample[None, ...].repeat(batch, 1, 1, 1).reshape(-1, 3, 3)
             )
@@ -265,11 +266,11 @@ class Agent:
         batch_inds = torch.arange(batch)
         est_rotation = samples[batch_inds, max_inds]
         if self.config.dataset == 'symsol':
-            gt = data.get('rot_mat_all').cuda()
+            gt = data.get('rot_mat_all').to(self.device)
             err_rad = utils.min_geodesic_distance_rotmats(
                 est_rotation, gt)
         else:
-            gt = data.get('rot_mat').cuda()
+            gt = data.get('rot_mat').to(self.device)
             err_rad = utils.min_geodesic_distance_rotmats(
                 gt, est_rotation.reshape(batch, -1, 3, 3))
         err_deg = torch.rad2deg(err_rad)
@@ -278,7 +279,7 @@ class Agent:
             err_deg=err_deg,
         )
         if self.config.dataset == 'pascal3d':
-            easy = torch.nonzero(data.get('easy').cuda()).reshape(-1)
+            easy = torch.nonzero(data.get('easy').to(self.device)).reshape(-1)
             result_dict = {k: v[easy] for k, v in result_dict.items()}
         return result_dict
 
@@ -301,16 +302,15 @@ class Agent:
             A = None
             feature = None
         else:
-            img = data.get("img").cuda()
-            net = self.net.cuda()
+            img = data.get("img").to(self.device)
+            net = self.net.to(self.device)
             if self.config.pretrain_fisher:
-                feature, A = net(img, data.get('cate').cuda(
-                ) + (1 if self.config.dataset == 'pascal3d' else 0))
+                feature, A = net(img, data.get('cate').to(self.device) + (1 if self.config.dataset == 'pascal3d' else 0))
                 A = A.reshape(-1, 3, 3)
             else:
                 feature = self.net(img)  # (b, feature_dim)
                 if self.config.category_num != 1 and self.config.embedding:
-                    self.embedding = self.embedding.cuda()
+                    self.embedding = self.embedding.to(self.device)
                     feature = torch.concat(
                         [feature, self.embedding[data.get('cate')]], dim=-1)
                 A = None
