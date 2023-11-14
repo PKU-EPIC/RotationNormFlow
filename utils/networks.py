@@ -14,7 +14,7 @@ fisher_network = dict(
 )
 
 
-def get_network(config):
+def get_network(config, device):
     assert config.condition
 
     if config.pretrain_fisher:
@@ -31,7 +31,7 @@ def get_network(config):
         net = get_ResNet(config)
     else:
         raise NotImplementedError()
-    net.cuda()
+    net.to(device)
     return net
 
 
@@ -92,6 +92,7 @@ class TestConfig:
 if __name__ == '__main__':
     config = TestConfig()
     net = get_network(config)
-    img = torch.randn(2, 3, 227, 227).cuda()
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    img = torch.randn(2, 3, 227, 227).to(device)
     output = net(img)
     print(output.shape)
