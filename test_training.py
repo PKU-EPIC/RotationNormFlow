@@ -14,7 +14,7 @@ class TestMainFunction(unittest.TestCase):
         losses_nll = main()
 
         # Calculate the quantile
-        quantile_value = torch.quantile(torch.tensor(losses_nll), 0.4)
+        quantile_value = torch.quantile(losses_nll.clone().detach(), 0.4)
 
         # Check if the quantile value is less than -1.0
         self.assertLess(quantile_value, -1.0, "The 40th percentile of losses_nll should be less than -1.0")
