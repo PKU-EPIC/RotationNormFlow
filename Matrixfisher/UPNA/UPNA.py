@@ -68,7 +68,7 @@ def get_minimum_covering_sphere(points):
                 return cand_mid, cand_rad
             included_points[num_included_points] = p
             return sphere_welzl(rem, included_points, num_included_points+1)
-    buf = np.empty((3,3), dtype=np.float)
+    buf = np.empty((3,3), dtype=np.float64)
     return sphere_welzl(points, buf, 0)
 
 # duplicated code
@@ -370,7 +370,7 @@ class UpnaSubset(torch.utils.data.Dataset):
         P /= P[2,2]
         Pinv = np.linalg.inv(P)
         transform = skimage.transform.ProjectiveTransform(Pinv)
-        im = img_full.astype(np.float)/255
+        im = img_full.astype(np.float64)/255
         warped_image = skimage.transform.warp(im, transform, output_shape=(desired_imagesize, desired_imagesize), mode='constant', cval=0.0)
         extrinsic_after[2,3] = 5
 

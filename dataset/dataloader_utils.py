@@ -31,7 +31,7 @@ class RandomConcatenatedSampler(torch.utils.data.sampler.Sampler):
 class RandomConcatenatedSamplerIterator():
     def __init__(self, origin):
         self.origin = origin
-        arr = np.empty(len(origin), dtype=np.int)
+        arr = np.empty(len(origin), dtype=np.int64)
         for i in range(len(self.origin.offsets) - 1):
             offset_start = self.origin.offsets[i]
             offset_end = self.origin.offsets[i + 1]

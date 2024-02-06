@@ -67,11 +67,13 @@ def visualize_sample(config, test_data, agent, vis_number=0):
     img_index = test_data.get('idx')[vis_number]
     #print(gt.size())
 
+    agent.eval()
+
     net = agent.net.cuda()
     feature = net(img)[vis_number].reshape(1, -1)  # (1, 128)
     #print(feature.size())
 
-    if config.category_num != 1:
+    if config.category_num != 1 and config.embedding and (not config.pretrain_fisher):
         embedding = agent.embedding.cuda()
         # print(test_data.get('category'))
         # print(test_data.get('cate'))
@@ -133,11 +135,13 @@ def visualize_pdf(config, test_data, agent, vis_number=0):
         gt = test_data.get('rot_mat')[vis_number, ...]
     img_index = test_data.get('idx')[vis_number]
 
+    agent.eval()
+
     net = agent.net.cuda()
     feature = net(img)[vis_number].reshape(1, -1)  # (1, 128)
     #print(feature.size())
 
-    if config.category_num != 1:
+    if config.category_num != 1 and config.embedding and (not config.pretrain_fisher):
         embedding = agent.embedding.cuda()
         # print(test_data.get('category'))
         # print(test_data.get('cate'))

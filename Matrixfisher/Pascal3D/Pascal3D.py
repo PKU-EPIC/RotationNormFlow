@@ -444,7 +444,7 @@ def get_minimum_covering_sphere(points):
                 return cand_mid, cand_rad
             included_points[num_included_points] = p
             return sphere_welzl(rem, included_points, num_included_points+1)
-    buf = np.empty((3,3), dtype=np.float)
+    buf = np.empty((3,3), dtype=np.float64)
     return sphere_welzl(points, buf, 0)
 
 
@@ -583,7 +583,7 @@ class Pascal3D():
         test_split = splits[1]
         rest = splits[0]
         rest = sorted(rest)
-        val_idx = (np.arange(len(rest)*validation_split_size)/validation_split_size).astype(np.int)
+        val_idx = (np.arange(len(rest)*validation_split_size)/validation_split_size).astype(np.int64)
         val_split = [rest[i] for i in val_idx]
         train_split = sorted(list(set(rest)-set(val_split)))
         if self.voc_train:
@@ -642,7 +642,7 @@ class Pascal3DSubsetWarp(Dataset):
             img_PIL = Image.open(f)
             img_PIL.convert('RGB')
             data = img_PIL.getdata()
-            if isinstance(data[0], np.int) or len(data[0]) == img_PIL.size[1] * img_PIL.size[0]:
+            if isinstance(data[0], np.int64) or len(data[0]) == img_PIL.size[1] * img_PIL.size[0]:
                 img_full = np.array(data).reshape(img_PIL.size[1], img_PIL.size[0]).reshape(img_PIL.size[1], img_PIL.size[0],1).repeat(3,2)
             else:
                 img_full = np.array(data).reshape(img_PIL.size[1], img_PIL.size[0], 3)
@@ -685,7 +685,7 @@ class Pascal3DSubsetWarp(Dataset):
         P /= P[2,2]
         Pinv = np.linalg.inv(P)
         transform = skimage.transform.ProjectiveTransform(Pinv)
-        im = img_full.astype(np.float)/255
+        im = img_full.astype(np.float64)/255
         warped_image = skimage.transform.warp(im, transform, output_shape=(desired_imagesize, desired_imagesize), mode='constant', cval=0.0)
         occluded = obj[DICT_OCCLUDED]
         truncated = obj[DICT_TRUNCATED]
@@ -715,7 +715,7 @@ class Pascal3DSubsetCrop(Dataset):
             img_PIL = Image.open(f)
             img_PIL.convert('RGB')
             data = img_PIL.getdata()
-            if isinstance(data[0], np.int) or len(data[0]) == img_PIL.size[1] * img_PIL.size[0]:
+            if isinstance(data[0], np.int64) or len(data[0]) == img_PIL.size[1] * img_PIL.size[0]:
                 img_full = np.array(data).reshape(img_PIL.size[1], img_PIL.size[0]).reshape(img_PIL.size[1], img_PIL.size[0],1).repeat(3,2)
             else:
                 img_full = np.array(data).reshape(img_PIL.size[1], img_PIL.size[0], 3)

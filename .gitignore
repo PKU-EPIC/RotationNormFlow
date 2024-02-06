@@ -170,3 +170,12 @@ Matrixfisher/storage
 *.pkl
 baseline/
 cluster/
+
+# temporal files for making video
+ckpt/
+settings/visualize.json
+eval_plot.py
+img2video.py
+
+*.ipynb
+*.sh

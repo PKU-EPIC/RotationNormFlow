@@ -70,7 +70,7 @@ class Pascal3DRendered(Dataset):
         # aug start
         img_full = Image.open(os.path.join(self.path, relpath))
         img_full = np.array(img_full.getdata()).reshape(
-            img_full.size[1], img_full.size[0], 3).astype(np.float) / 255
+            img_full.size[1], img_full.size[0], 3).astype(np.float64) / 255
         current_size = max(img_full.shape[1], img_full.shape[0])
         bbox = [0, 0, img_full.shape[1], img_full.shape[0]]
         distance = 4.0
@@ -79,7 +79,7 @@ class Pascal3DRendered(Dataset):
         t = t
         cam = 3000
         principal_point = np.array(
-            [img_full.shape[1] / 2, img_full.shape[0] / 2], dtype=np.float)
+            [img_full.shape[1] / 2, img_full.shape[0] / 2], dtype=np.float64)
 
         flip = np.random.randint(2)
         if flip:

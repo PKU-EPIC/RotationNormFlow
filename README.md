@@ -1,23 +1,42 @@
-# [CVPR 2023] Delving into Discrete Normalizing Flows on SO(3) Manifold for Probabilistic Rotation Modeling
-Official code for "**Delving into Discrete Normalizing Flows on SO(3) Manifold for Probabilistic Rotation Modeling**" *(CVPR 2023)*
+# <div align="center">[CVPR 2023] Delving into Discrete Normalizing Flows on SO(3) Manifold for Probabilistic Rotation Modeling</div>
+<!-- Official code for "**Delving into Discrete Normalizing Flows on SO(3) Manifold for Probabilistic Rotation Modeling**" *(CVPR 2023)* -->
 
-[Paper](https://arxiv.org/abs/2304.03937)
+<p align="center">
+  <video controls>
+  <source src="assets/symsol.mp4" type="video/mp4">
+</video>
+</p>
 
-## Setup
+<div align="center"> 
 
-### Dependencies
+[**Setup**](#🔧-setup) **|** [**Train**](#train) **|** [**Eval**](#evaluation) **|** [**Bib**](#bibtex) **|**  [**acknowledgement**](#🤗-acknowledgement)
 
-* Our code are based on python 3.9, you can set up the enviornment via pasting:
-```bash
-conda install -y pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.3 -c pytorch
-conda install -y -c fvcore -c iopath -c conda-forge fvcore iopath # to install pytorch3d GPU version
-conda install -y -c bottler nvidiacub # to install pytorch3d GPU version
-conda install -y pytorch3d -c pytorch3d 
-pip install scipy sklearn nflows healpy opencv-python wget scikit-image
+[**Paper**](https://arxiv.org/abs/2304.03937) **|** [**Page**](https://pku-epic.github.io/RotationNormFlow/) **|** [**Video**](https://youtu.be/0t_GyLGsmV8) 
+
+
+</div>
+
+# 🔧 Setup
+
+## Dependencies
+
+* Our code are based on python 3.9, with GPU version pytorch and pytorch3d install. 
+* Our code has been tested on torch 1.13.0, pytorch3d 0.7.5, nvcc 11.8.
+* You can refer to [pytorch3d](https://github.com/facebookresearch/pytorch3d/blob/main/INSTALL.md) for installation of pytorch3d.
+* install other dependencies:
+```
+pip install scipy scikit-learn nflows healpy opencv-python wget scikit-image
 conda install -y tqdm configargparse matplotlib
 conda install -y -c conda-forge python-lmdb
 ```
 ## Dataset
+**SYNTHETIC**
+
+Obtain synthetic dataset used in unconditional experiments in [raw](https://drive.google.com/file/d/1db5dgRsgXnpRgDSO4xxHbO3J229zbfF0/view?usp=sharing) and link it to `data`.
+```bash
+unzip raw.zip
+ln -s $PWD/rwa $PROJECT_PATH/data
+```
 
 **SYMSOL**
 
@@ -49,7 +68,21 @@ ln -s $PWD/syn_images_cropped_bkg_overlaid $PROJECT_PATH/data
 
 Please note that when using Pascal3D+, the data annotations will be generated during the first run of the program.
 
-# Usage
+After downloading all datasets, you should have following folder tree:
+```
+./
+├── configs/
+├── data/
+│   ├── ModelNet10-SO3/
+│   ├── PASCAL3D+_release1.1
+│   │   └── /syn_images_cropped_bkg_overlaid
+│   ├── raw
+│   └── symsol_dataset
+├── settings/
+├── utils/
+...
+```
+# 👋 Usage
 
 ## Train
 
@@ -60,7 +93,8 @@ python train.py --config=<config> [--args] # for conditional experiments
 The training process is logged by `tensorboard`. 
 ### UNCONDITION:
 ```bash
-python train_uncondition.py --config=settings/raw.yml --category=<category> # category can be [peak, cone, line, fisher24]
+python train_uncondition.py --config=settings/raw.yml --category=<category> 
+# category can be [peak, cone, line, fisher24]
 ```
 ### SYMSOL:
 ```bash
@@ -79,12 +113,6 @@ We use pretrained fisher as backbone to extract feature from image and also prov
 ./
 ├── configs/
 ├── data/
-│   ├── ModelNet10-SO3/
-│   ├── pascal3d
-│   │   └── PASCAL3D+_release1.1/
-│   ├── raw
-│   └── symsol_dataset
-├── dataset/
 ├── Matrixfisher/
 │   ├── storage/
 │   │   ├── modelnet/
@@ -96,7 +124,7 @@ We use pretrained fisher as backbone to extract feature from image and also prov
 ```
 ### Pascal3D+
 ```bash
-python train.py --config=settings/pascal.yml
+python train.py --config=settings/pascal_uni.yml
 python train.py --config=settings/pascal_fisher.yml
 ```
 
@@ -107,7 +135,7 @@ python eval_uncondition.py <ckpt_path> --configs <config name> --eval_only [--ar
 python eval.py <ckpt_path> --configs <config name> --eval_only [--args] # for unconditional experiments
 ```
 
-Checkpoint can be obtained in [website](https://drive.google.com/drive/folders/1Fd3SG7x8EmG0ArQgkddJxB8fxMGi_8Yi?usp=sharing). We provide checkpoint of synthetic datasets (for unconditional experiments, in `raw` folder), and of modelnet10-SO3. Checkpoints of SYMSOL and Pascal3d+ datasets will be released soon.
+⚡ Checkpoint can be obtained in [website](https://drive.google.com/drive/folders/1Fd3SG7x8EmG0ArQgkddJxB8fxMGi_8Yi?usp=sharing). We provide checkpoint of synthetic datasets (for unconditional experiments, in `raw` folder), and of modelnet10-SO3, SYMSOL and Pascal3d+ datasets.
 
 ### UNCONDITION:
 ```bash
@@ -137,15 +165,19 @@ python eval.py <ckpt_path> --config=settings/pascal_fisher.yml
 
 # Bibtex
 ```bibtex
-@misc{liu2023delving,
-      title={Delving into Discrete Normalizing Flows on SO(3) Manifold for Probabilistic Rotation Modeling}, 
-      author={Yulin Liu and Haoran Liu and Yingda Yin and Yang Wang and Baoquan Chen and He Wang},
-      year={2023},
-      eprint={2304.03937},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+@inproceedings{liu2023delving,
+  title={Delving into Discrete Normalizing Flows on SO (3) Manifold for Probabilistic Rotation Modeling},
+  author={Liu, Yulin and Liu, Haoran and Yin, Yingda and Wang, Yang and Chen, Baoquan and Wang, He},
+  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages={21264--21273},
+  year={2023}
 }
+
 ```
 
-# Acknowledgement
-The code base used in this project is sourced from the repository of the matrix Fisher distribution, https://github.com/tylee-fdcl/Matrix-Fisher-Distribution and https://github.com/Davmo049/Public_prob_orientation_estimation_with_matrix_fisher_distributions, Implicit-PDF (for visualization), https://github.com/google-research/google-research/tree/master/implicit_pdf, Flow on tori and sphere, https://github.com/ryushinn/flows-on-sphere.
+# 🤗 Acknowledgement
+The code base used in this project is sourced from the repository of the [matrix Fisher distribution](https://github.com/Davmo049/Public_prob_orientation_estimation_with_matrix_fisher_distributions) and , [Implicit-PDF](https://github.com/google-research/google-research/tree/master/implicit_pdf) (for visualization), [Flow on tori and sphere](https://github.com/ryushinn/flows-on-sphere).
+
+# ✉️ Misc
+
+If you have any question, please feel free to mail `yul266@ucsd.edu`.
