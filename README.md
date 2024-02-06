@@ -1,7 +1,11 @@
 # <div align="center">[CVPR 2023] Delving into Discrete Normalizing Flows on SO(3) Manifold for Probabilistic Rotation Modeling</div>
 <!-- Official code for "**Delving into Discrete Normalizing Flows on SO(3) Manifold for Probabilistic Rotation Modeling**" *(CVPR 2023)* -->
 
-https://pku-epic.github.io/RotationNormFlow/images/symsol.mp4
+
+
+https://github.com/PKU-EPIC/RotationNormFlow/assets/103474188/94f1ee76-2899-4aab-a81f-b9ae4298f3f3
+
+
 <!-- <p align="center">
   <video controls>
   <source src="https://pku-epic.github.io/RotationNormFlow/images/symsol.mp4" type="video/mp4">
