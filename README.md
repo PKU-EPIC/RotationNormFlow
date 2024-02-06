@@ -3,7 +3,7 @@
 
 <p align="center">
   <video controls>
-  <source src="assets/symsol.mp4" type="video/mp4">
+  <source src="https://pku-epic.github.io/RotationNormFlow/images/symsol.mp4" type="video/mp4">
 </video>
 </p>
 
